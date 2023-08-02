@@ -80,3 +80,12 @@ resource "aws_security_group" "lb" {
     Terraform   = "true"
   }
 }
+
+// Z0193262SXR5F7V3J0MD
+resource "aws_route53_record" "dns" {
+  zone_id = "Z0193262SXR5F7V3J0MD"
+  name    = "derek.nonamesec.com"
+  type    = "CNAME"
+  ttl     = 300
+  records = [aws_lb.lb.dns_name]
+}
