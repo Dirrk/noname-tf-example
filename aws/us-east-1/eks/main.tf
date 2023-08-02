@@ -41,7 +41,7 @@ module "eks" {
       create_iam_role = false
       iam_role_arn = "arn:aws:iam::699899179833:role/EksNodeGroupInstanceRole"
 
-      instance_types = ["t3.large"]
+      instance_types = ["t3.medium"]
       capacity_type  = "SPOT"
     }
   }
@@ -51,6 +51,17 @@ module "eks" {
   create_iam_role = false
   create_kms_key = false
   cluster_encryption_config = {}
+  enable_irsa = false
+
+  cluster_security_group_additional_rules = {
+    open = {
+      protocol = "TCP"
+      from_port = "443"
+      to_port = "443"
+      type = "ingress"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  }
 
   aws_auth_roles = [
     {

@@ -1,0 +1,35 @@
+# 699899179833.dkr.ecr.us-east-1.amazonaws.com/test-python:1.0.0
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-python
+  namespace: dev
+  labels:
+    app: test-python
+spec:
+  replicas: 1
+  strategy:
+    type: Replace
+  selector:
+    matchLabels:
+      app: test-python
+  template:
+    metadata:
+      labels:
+        app: test-python
+    spec:
+      containers:
+        - name: test-python
+          image: 699899179833.dkr.ecr.us-east-1.amazonaws.com/test-python:1.0.0
+          ports:
+          - name: http
+            protocol: TCP
+            containerPort: 80
+          livenessProbe:
+            httpGet:
+              path: "/test1"
+              port: 80
+          readinessProbe:
+            httpGet:
+              path: "/test1"
+              port: 80
