@@ -30,19 +30,27 @@ module "eks" {
   subnet_ids               = ["subnet-04102795c60e02f9d", "subnet-09ac094aa2ae3df0b"]
   control_plane_subnet_ids = ["subnet-04102795c60e02f9d", "subnet-09ac094aa2ae3df0b"]
 
+  iam_role_arn = "arn:aws:iam::699899179833:role/eksClusterRole"
+
   eks_managed_node_groups = {
-    blue = {}
     green = {
       min_size     = 1
       max_size     = 3
       desired_size = 1
+
+      create_iam_role = false
+      iam_role_arn = "arn:aws:iam::699899179833:role/EksNodeGroupInstanceRole"
 
       instance_types = ["t3.large"]
       capacity_type  = "SPOT"
     }
   }
 
-  manage_aws_auth_configmap = true
+  manage_aws_auth_configmap = false
+  create_cloudwatch_log_group = false
+  create_iam_role = false
+  create_kms_key = false
+  cluster_encryption_config = {}
 
   aws_auth_roles = [
     {
