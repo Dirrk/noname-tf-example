@@ -24,11 +24,11 @@ module "eks" {
   cluster_name    = "derek-test"
   cluster_version = "1.27"
 
-  cluster_endpoint_public_access  = true
+  cluster_endpoint_public_access  = false
 
   vpc_id                   = "vpc-09cf75f05de5b433e"
   subnet_ids               = ["subnet-04102795c60e02f9d", "subnet-09ac094aa2ae3df0b"]
-  control_plane_subnet_ids = ["subnet-07c25242abaef4f31", "subnet-083a7542e97344698"]
+  control_plane_subnet_ids = ["subnet-04102795c60e02f9d", "subnet-09ac094aa2ae3df0b"]
 
   eks_managed_node_groups = {
     blue = {}
