@@ -17,6 +17,11 @@ terraform {
   }
 }
 
+locals {
+  vpc_id = "vpc-09cf75f05de5b433e"
+  private_subnets = ["subnet-04102795c60e02f9d", "subnet-09ac094aa2ae3df0b"]
+}
+
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "19.15.4"
@@ -26,9 +31,9 @@ module "eks" {
 
   cluster_endpoint_public_access  = false
 
-  vpc_id                   = "vpc-09cf75f05de5b433e"
-  subnet_ids               = ["subnet-04102795c60e02f9d", "subnet-09ac094aa2ae3df0b"]
-  control_plane_subnet_ids = ["subnet-04102795c60e02f9d", "subnet-09ac094aa2ae3df0b"]
+  vpc_id                   = local.vpc_id
+  subnet_ids               = local.private_subnets
+  control_plane_subnet_ids = local.private_subnets
 
   iam_role_arn = "arn:aws:iam::699899179833:role/eksClusterRole"
 
@@ -58,6 +63,16 @@ module "eks" {
       protocol = "TCP"
       from_port = "443"
       to_port = "443"
+      type = "ingress"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  }
+
+  node_security_group_additional_rules = {
+    test-python = {
+      protocol = "TCP"
+      from_port = "30005"
+      to_port = "30005"
       type = "ingress"
       cidr_blocks = ["0.0.0.0/0"]
     }
