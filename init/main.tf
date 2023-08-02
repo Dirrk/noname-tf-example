@@ -10,16 +10,15 @@ terraform {
 
   required_version = "= 1.0.11"
 
-  # backend "s3" {
-  #   bucket         = "noname-derek-tf-state"
-  #   key            = "init.tfstate"
-  #   region         = "us-east-1"
-  #   dynamodb_table = "tf-locking-table"
-  # }
+  backend "s3" {
+    bucket         = "noname-derek-tf-state"
+    key            = "init.tfstate"
+    region         = "us-east-1"
+  }
 }
 
 resource "aws_s3_bucket" "terraform" {
-  name = "noname-derek-tf-state"
+  bucket = "noname-derek-tf-state"
   tags = {
     Environment = "test"
     Candidate   = "Derek"
@@ -40,27 +39,5 @@ resource "aws_s3_bucket_versioning" "terraform" {
 
   versioning_configuration {
     status = "Enabled"
-  }
-}
-resource "aws_s3_bucket_acl" "terraform" {
-  bucket = aws_s3_bucket.terraform.bucket
-  acl    = "private"
-}
-
-resource "aws_dynamodb_table" "terraform-locking-table" {
-  name           = "tf-locking-table"
-  read_capacity  = 1
-  write_capacity = 1
-  hash_key       = "LockID"
-
-  attribute {
-    name = "LockID"
-    type = "S"
-  }
-
-  tags = {
-    Environment = "test"
-    Candidate   = "Derek"
-    Terraform   = "true"
   }
 }

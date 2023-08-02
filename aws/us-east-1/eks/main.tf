@@ -14,7 +14,6 @@ terraform {
     bucket         = "noname-derek-tf-state"
     key            = "aws/us-east-1/eks.tfstate"
     region         = "us-east-1"
-    dynamodb_table = "tf-locking-table"
   }
 }
 
